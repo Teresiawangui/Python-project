@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'teacher',
     'course',
     'class',
-    'ClassPeriod',
+    'classPeriod',
     'rest_framework',
 ]
 
