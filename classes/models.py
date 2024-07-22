@@ -1,7 +1,8 @@
 from django.db import models
-# from .models import Teacher
 
-class Class(models.Model):
+# Create your models here
+
+class Classes(models.Model):
     class_name=models.CharField(max_length=20)
     # class_courses =models.ManyToManyField(Teacher,onDelete=models.CASCADE)
     class_representative = models.CharField(max_length=20)
