@@ -15,6 +15,12 @@ from rest_framework import status
 class StudentListView(APIView):
     def get(self, request):
         students = Student.objects.all()
+        lastname = request.query_params.get("lastname")
+        email = request.query_params.get("email")
+        if lastname:
+            students=students.filter(lastname=lastname)
+            if email:
+                email=email.filter(email=email)
         serializer = StudentSerializer(students, many=True)
         return Response(serializer.data)
     def post(self,request):
@@ -77,7 +83,17 @@ class StudentDetailView(APIView):
     def get(self,request,id):
         student = Student.objects.get(id=id)
         serializer = StudentSerializer(student)
-        return Response(serializer.data)    
+        return Response(serializer.data)  
+    def email_student(self,student,course_id):
+        course =Course.objects.get(id=course_id)
+        student.course.add(course)
+    def post(self,request,id):
+        student = Student.objects.get(id=id)
+        action=request.data.get("action")
+        if action(email):
+            course_id=request.data.get("course")
+            self.email_student(student,course_id)
+        return Response(status.HTTP_201_CREATED)
     def put(self,request,id):
         student =Student.objects.get(id=id)
         serializer = StudentSerializer(student,data=request.data)

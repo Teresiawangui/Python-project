@@ -10,9 +10,9 @@ class Course(models.Model):
     # course_prior_skills=models.Choices(max_length=25)
     course_learning_material=models.CharField(max_length=20)
     # course_trainer = models.OneToOneField(Teacher,on_delete=models.CASCADE)
-    course_attendance_per_week=models.PositiveSmallIntegerField()
-    classes_hours = models.DurationField()
-    assessment_requirements = models.TextField()
+    course_attendance_per_week=models.CharField(max_length=100, default=5)
+    classes_hours = models.DurationField(max_length=5, default=2)
+    assessment_requirements = models.CharField(max_length=255, default='Default Value Here')
 
     
 

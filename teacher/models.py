@@ -11,11 +11,11 @@ class Teacher(models.Model):
     specialization = models.CharField(max_length=25)
     # number_of_classes_per_week = models.ManyToManyField(Course, on_Delete=models.CASCADE )
     years_of_experience = models.PositiveSmallIntegerField()
-    bio = models.TextField()
-    contact = models.CharField(max_length=20)
-    bank_account_number = models.TextField()
-    profile = models.ImageField()
-    phone_number = models.PositiveIntegerField()
+    bio = models.TextField(default='')
+    contact = models.CharField(max_length=20,default='075634252693')
+    bank_account_number = models.TextField(default=456765)
+    profile = models.ImageField(default='')
+    phone_number = models.PositiveIntegerField(default='078654323412')
 
     def __str__(self):
         return f"{self.firstname} {self.email}"

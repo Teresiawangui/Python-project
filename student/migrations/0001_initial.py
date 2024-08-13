@@ -21,6 +21,7 @@ class Migration(migrations.Migration):
                 ('country', models.CharField(max_length=20)),
                 ('date_of_birth', models.DateField()),
                 ('code', models.PositiveSmallIntegerField()),
+                # ('codeID', models.CharField(max_length=100)),
             ],
         ),
     ]
