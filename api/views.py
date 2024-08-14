@@ -7,10 +7,13 @@ from classes.models import Classes
 from course.models import Course
 from .serializers import StudentSerializer
 from .serializers import TeacherSerializer
+from .serializers import  ClassesSerializer
 from .serializers import ClassPeriodSerializer
 from .serializers import CourseSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from datetime import timedelta
+from django.utils import timezone
 # Create your views here.
 class StudentListView(APIView):
     def get(self, request):
@@ -141,6 +144,13 @@ class ClassPeriodDetailView(APIView):
         class_period = Teacher.objects.get(id=id)
         class_period.delete()
         return Response(status=status.HTTP_202_ACCEPTED)
+    def post(self, request):
+        serializer = ClassPeriodSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 class CourseDetailView(APIView):
     def get(self,request,id):
             course = Course.objects.get(id=id)
@@ -158,6 +168,15 @@ class CourseDetailView(APIView):
         course = Course.objects.get(id=id)
         course.delete()
         return Response(status=status.HTTP_202_ACCEPTED)
+    def post(self, request, id):
+        course = Course.objects.get(id=id)
+        action = request.data.get("action")
+        if action == "assign_teacher":
+            teacher_id = request.data.get("teacher")
+            teacher = Teacher.objects.get(id=teacher_id)
+            course.teacher.add(teacher)
+            return Response({"status": "teacher assigned"}, status=status.HTTP_201_CREATED)
+        return Response({"error": "invalid action"}, status=status.HTTP_400_BAD_REQUEST)
 
 class ClassesDetailView(APIView):
     def get(self,request,id):
@@ -175,7 +194,18 @@ class ClassesDetailView(APIView):
     def delete(self,request,id):
         classes = Teacher.objects.get(id=id)
         classes.delete()
-        return Response(status=status.HTTP_202_ACCEPTED)    
+        return Response(status=status.HTTP_202_ACCEPTED)
+    def post(self, request, id):
+        classes = Classes.objects.get(id=id)
+        action = request.data.get("action")
+        if action == "add_student":
+            student_id = request.data.get("student")
+            student = Student.objects.get(id=student_id)
+            classes.students.add(student)
+            return Response({"status": "student added"}, status=status.HTTP_201_CREATED)
+        return Response({"error": "invalid action"}, status=status.HTTP_400_BAD_REQUEST)        
+    
+   
 
 
 
@@ -183,3 +213,5 @@ class ClassesDetailView(APIView):
     
     
     
+
+
